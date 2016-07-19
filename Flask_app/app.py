@@ -1,6 +1,6 @@
 import os
 import sys
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory, jsonify
 from werkzeug import secure_filename
 import pymzml
 
@@ -77,7 +77,7 @@ def peak_finding(filename):
 
 @app.route('/plot_spectrum/<filename>')
 def plot_spectrum(filename):
-    filepath = "/Users/jenniferchen/github/HS698/Flask_app/uploads/" + filename
+    filepath = get_abs_path() + "/uploads/" + filename
     run = pymzml.run.Reader(filepath, MSn_Precision=25e-6)
     p = pymzml.plot.Factory()
     for spec in run:
@@ -96,7 +96,7 @@ def plot_spectrum(filename):
 
 @app.route('/highest_peaks/<filename>')
 def highest_peaks(filename):
-    filepath = "/Users/jenniferchen/github/HS698/Flask_app/uploads/" + filename
+    filepath = get_abs_path() + "/uploads/" + filename
     run = pymzml.run.Reader(filepath, MS1_Precision=5e-6,
                             MSn_Precision=20e-6)
     for spectrum in run:
@@ -111,7 +111,7 @@ def highest_peaks(filename):
 @app.route('/extract_Ion_Chromatogram/<filename>')
 def extract_Ion_Chromatogram(filename):
     MASS_2_FOLLOW = 810.53
-    filepath = "/Users/jenniferchen/github/HS698/Flask_app/uploads/" + filename
+    filepath = get_abs_path() + "/uploads/" + filename
     run = pymzml.run.Reader(filepath, MS1_Precision=20e-6, MSn_Precision=20e-6)
     timeDependentIntensities = []
     for spectrum in run:
@@ -121,9 +121,26 @@ def extract_Ion_Chromatogram(filename):
                 for mz, I in matchList:
                     timeDependentIntensities.append(
                         [spectrum['scan start time'], I, mz])
-    lst = []
+    diction = {'rt': [], 'i': [], 'mz': []}
     for rt, i, mz in timeDependentIntensities:
-        lst.append('{0:5.3f} {1:13.4f}       {2:10}'.format(rt, i, mz))
+        diction['rt'].append(round(rt, 3))
+        diction['i'].append(round(i, 4))
+        diction['mz'].append(round(mz, 10))
+    return jsonify(diction)
+
+
+@app.route('/original_XML_Tree/<filename>')
+def original_XML_Tree(filename):
+    filepath = get_abs_path() + "/uploads/" + filename
+    run = pymzml.run.Reader(filepath, MSn_Precision=250e-6)
+
+    spectrum = run[1]
+    for element in spectrum.xmlTree:
+        print('-' * 40)
+        print(element)
+        print(element.get('accession'))
+        print(element.tag)
+        print(element.items())
 
 if __name__ == '__main__':
     app.run(port=4555, debug=True)
