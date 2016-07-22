@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The Original XML Tree</title>
+</head>
+<body>
+    <h1>The Original XML Tree of a Spectrum</h1>
+    {% for element in spectrum_xmlTree %}
+        <p>
+            --------------------------------------------------------------<br />
+            {{ element }}<br />
+            {{ element.get('accession') }}<br />
+            {{ element.tag }}<br />
+            {{ element.items() }}<br />
+        </p>
+    {% endfor %}
+</body>
+</html>
