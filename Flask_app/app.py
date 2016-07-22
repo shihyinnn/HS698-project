@@ -133,14 +133,7 @@ def extract_Ion_Chromatogram(filename):
 def original_XML_Tree(filename):
     filepath = get_abs_path() + "/uploads/" + filename
     run = pymzml.run.Reader(filepath, MSn_Precision=250e-6)
-
     spectrum = run[1]
-    for element in spectrum.xmlTree:
-        print('-' * 40)
-        print(element)
-        print(element.get('accession'))
-        print(element.tag)
-        print(element.items())
     return render_template('original_XML_Tree.html',
                            spectrum_xmlTree=spectrum.xmlTree)
 
