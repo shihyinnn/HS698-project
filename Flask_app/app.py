@@ -141,6 +141,8 @@ def original_XML_Tree(filename):
         print(element.get('accession'))
         print(element.tag)
         print(element.items())
+    return render_template('original_XML_Tree.html',
+                           spectrum_xmlTree=spectrum.xmlTree)
 
 if __name__ == '__main__':
     app.run(port=4555, debug=True)
