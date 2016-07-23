@@ -2,9 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Upload File</title>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"
+          rel="stylesheet">
 </head>
 <body>
-Uploaded
+    <p align="center">
+    <h2 align="center">Uploaded<br /></h2>
+    </p>
+
+    <br />
+
+    <p align="center">
+
+        <a href="{{ url_for('peak_finding', filename=filename) }}" class="btn btn-default">Find a Peak</a>
+        <a href="{{ url_for('plot_spectrum', filename=filename) }}" class="btn btn-primary">Plot Spectrum</a>
+        <a href="{{ url_for('highest_peaks', filename=filename) }}" class="btn btn-success">Find the Highest Peaks</a>
+        <a href="{{ url_for('extract_Ion_Chromatogram', filename=filename) }}" class="btn btn-info">Extract a Ion Chromatogram</a>
+        <a href="{{ url_for('original_XML_Tree', filename=filename) }}" class="btn btn-warning">Access Original XML Tree</a>
+
+    </p>
+
 </body>
 </html>
