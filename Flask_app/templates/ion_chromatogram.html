@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Extract Ion Chromatogram</title>
+
+</head>
+<body>
+    <h1>Extract Ion Chromatogram</h1>
+
+    {% from "_formhelpers.html" import render_field %}
+    <form method=post action="{{ url_for('extract_Ion_Chromatogram', filename=filename) }}">
+      <dl>
+          {{ render_field(form.spectrum_ms_level) }}
+          {{ render_field(form.mz2find ) }}
+      </dl>
+      <p><input type=submit value="Extract Ion Chromatogram">
+    </form>
+
+    {% if json_dict %}
+        <p>{{ json_dict }}</p>
+    {% endif %}
+{#    fail to display jsonify dictionary in html#}
+
+{#    {% if diction %}#}
+{#        <p >{{ diction|safe }}</p>#}
+{#        <p>{{ diction }}</p>#}
+{#        <p id="ptag"></p>#}
+{#    {% endif %}#}
+
+</body>
+{#<script>#}
+{#var data = JSON.parse({{ diction|safe }});#}
+{#console.log(data.name);#}
+{#    var jsonVar ={{ diction|tojson }};#}
+{#    var jsonStr = JSON.stringify(JSON.parse(jsonVar), null, 4);#}
+{#    document.body.innerHTML = jsonStr;#}
+{#    var json_dict = {{ diction|tojson }};#}
+{#    document.getElementById("ptag").innerHTML = jsonStr;#}
+{#</script>#}
+</html>
