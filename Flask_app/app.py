@@ -3,6 +3,7 @@ import sys
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory, jsonify
 from werkzeug import secure_filename
 import pymzml
+from wtforms import Form, IntegerField, validators, StringField, DecimalField
 
 # Initialize the Flask application
 app = Flask(__name__)
@@ -52,27 +53,40 @@ def upload():
         return "File uploaded is not supported..."
 
 
+class PeakFindingForm(Form):
+    spectrum_ms_level = IntegerField('Spectrum MS Level')
+    mz_value = DecimalField('MZ Value')
 
 
 # This route is expecting a parameter containing the name
 # of a file. Then it will locate that file on the upload
 # directory and show it on the browser, so if the user uploads
 # an image, that image is going to be show after the upload
-@app.route('/peak_finding/<filename>')
+@app.route('/peak_finding/<filename>', methods=["GET", "POST"])
 def peak_finding(filename):
     filepath = get_abs_path() + "/uploads/" + filename
     run = pymzml.run.Reader(filepath, MS1_Precision=5e-6,
                             MSn_Precision=20e-6)
-    lst = []
-    for spectrum in run:
-        if spectrum["ms level"] == 2:
-            peak_to_find = spectrum.hasPeak(1016.5404)
-            lst.append(peak_to_find)
-    if not lst:
-        return "No peak found."
-    return render_template('peak_to_find.html', lst=lst)
-    # return send_from_directory(app.config['UPLOAD_FOLDER'],
-    #                            filename)
+    form = PeakFindingForm(request.form)
+
+    if request.method == 'POST' and form.validate():
+        # What to do when user submits form
+
+        spectrum_ms_level = form.spectrum_ms_level.data
+        mz_value = form.mz_value.data
+
+        lst = []
+        for spectrum in run:
+            if spectrum["ms level"] == spectrum_ms_level:
+                peak_to_find = spectrum.hasPeak(mz_value)
+                if peak_to_find:
+                    lst.append(peak_to_find)
+        return render_template('peak_to_find.html', form=form, filename=filename, lst=lst)
+
+    # Create the form (the first time the page loads)
+    return render_template('peak_to_find.html', form=form, filename=filename)
+
+
 
 
 @app.route('/plot_spectrum/<filename>')
@@ -94,39 +108,107 @@ def plot_spectrum(filename):
                                        filename='tmp/plotAspect.xhtml'))
 
 
-@app.route('/highest_peaks/<filename>')
+
+class HighestPeakForm(Form):
+    spec_ms_level = IntegerField('Spectrum MS Level')
+    id_value = IntegerField('id')
+    num_of_peaks = IntegerField('Number of n-highest peaks')
+
+
+@app.route('/highest_peaks/<filename>', methods=["GET", "POST"])
 def highest_peaks(filename):
     filepath = get_abs_path() + "/uploads/" + filename
     run = pymzml.run.Reader(filepath, MS1_Precision=5e-6,
                             MSn_Precision=20e-6)
-    for spectrum in run:
-        if spectrum["ms level"] == 2:
-            if spectrum["id"] == 1770:
-                for mz, i in spectrum.highestPeaks(5):
-                    return mz, i
-        else:
-            return "Peak does not exist."
+
+    form = HighestPeakForm(request.form)
+
+    if request.method == 'POST' and form.validate():
+
+        spectrum_ms_level = form.spec_ms_level.data
+        id_value = form.id_value.data
+        num_of_peaks = form.num_of_peaks.data
+
+        lst = []
+
+        for spectrum in run:
+            if spectrum["ms level"] == spectrum_ms_level:
+                if spectrum["id"] == id_value:
+                    for mz, i in spectrum.highestPeaks(num_of_peaks):
+                        lst.append((mz, i))
+        return render_template('highest_peaks.html', form=form,
+                               filename=filename, lst=lst)
+            # else:
+            #     return "Peak does not exist."
+    return render_template('highest_peaks.html', form=form, filename=filename)
 
 
-@app.route('/extract_Ion_Chromatogram/<filename>')
+
+class IonChromatogramForm(Form):
+    mz2find = DecimalField('mz value which should be found')
+    spectrum_ms_level = IntegerField('Spectrum MS Level')
+
+
+
+
+@app.route('/extract_Ion_Chromatogram/<filename>', methods=["GET", "POST"])
 def extract_Ion_Chromatogram(filename):
-    MASS_2_FOLLOW = 810.53
     filepath = get_abs_path() + "/uploads/" + filename
     run = pymzml.run.Reader(filepath, MS1_Precision=20e-6, MSn_Precision=20e-6)
     timeDependentIntensities = []
-    for spectrum in run:
-        if spectrum['ms level'] == 1:
-            matchList = spectrum.hasPeak(MASS_2_FOLLOW)
-            if matchList != []:
-                for mz, I in matchList:
-                    timeDependentIntensities.append(
-                        [spectrum['scan start time'], I, mz])
-    diction = {'rt': [], 'i': [], 'mz': []}
-    for rt, i, mz in timeDependentIntensities:
-        diction['rt'].append(round(rt, 3))
-        diction['i'].append(round(i, 4))
-        diction['mz'].append(round(mz, 10))
-    return jsonify(diction)
+
+    form = IonChromatogramForm(request.form)
+
+    if request.method == 'POST' and form.validate():
+
+        mz2find = form.mz2find.data
+        spectrum_ms_level = form.spectrum_ms_level.data
+
+    # MASS_2_FOLLOW = 810.53
+        for spectrum in run:
+            if spectrum['ms level'] == spectrum_ms_level:
+                matchList = spectrum.hasPeak(mz2find)
+                if matchList != []:
+                    for mz, I in matchList:
+                        timeDependentIntensities.append(
+                            [spectrum['scan start time'], I, mz])
+        diction = {'rt': [], 'i': [], 'mz': []}
+        for rt, i, mz in timeDependentIntensities:
+            diction['rt'].append(round(rt, 3))
+            diction['i'].append(round(i, 4))
+            diction['mz'].append(round(mz, 10))
+
+        json_dict = jsonify(**diction)
+        return render_template('ion_chromatogram.html', form=form,
+                               filename=filename, json_dict=json_dict, diction=diction)
+
+    return render_template('ion_chromatogram.html', form=form, filename=filename)
+
+
+
+# @app.route('/extract_Ion_Chromatogram/<filename>', methods=["GET", "POST"])
+# def extract_Ion_Chromatogram(filename):
+#     filepath = get_abs_path() + "/uploads/" + filename
+#     run = pymzml.run.Reader(filepath, MS1_Precision=20e-6, MSn_Precision=20e-6)
+#     timeDependentIntensities = []
+#
+#     MASS_2_FOLLOW = 810.53
+#     for spectrum in run:
+#         if spectrum['ms level'] == 1:
+#             matchList = spectrum.hasPeak(MASS_2_FOLLOW)
+#             if matchList != []:
+#                 for mz, I in matchList:
+#                     timeDependentIntensities.append(
+#                         [spectrum['scan start time'], I, mz])
+#     diction = {'rt': [], 'i': [], 'mz': []}
+#     for rt, i, mz in timeDependentIntensities:
+#         diction['rt'].append(round(rt, 3))
+#         diction['i'].append(round(i, 4))
+#         diction['mz'].append(round(mz, 10))
+#
+#     json_dict = jsonify(diction)
+#     return json_dict
+
 
 
 @app.route('/original_XML_Tree/<filename>')
