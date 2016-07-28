@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Highest Peaks</title>
+</head>
+<body>
+<h1>Highest Peaks</h1>
+
+    {% from "_formhelpers.html" import render_field %}
+    <form method=post action="{{ url_for('highest_peaks', filename=filename) }}">
+      <dl>
+          {{ render_field(form.spec_ms_level) }}
+          {{ render_field(form.id_value) }}
+          {{ render_field(form.num_of_peaks) }}
+      </dl>
+      <p><input type=submit value="Find Peaks">
+    </form>
+
+    {% if lst %}
+        <p>{{ lst }}</p>
+    {% endif %}
+
+</body>
+</html>
