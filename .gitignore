@@ -3,3 +3,7 @@
 
 # PyCharm
 .idea/
+
+# Flask app
+Flask_app/static/*
+Flask_app/uploads/*
