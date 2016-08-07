@@ -1,11 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+    <meta HTTP-EQUIV="Cache-Control" CONTENT="no_cache">
     <title>Plot a Spectrum</title>
 </head>
 <body>
-        <h1>Spectrum Plot</h1>
-        <img src="{{ fig }}" />
+    <h1>Spectrum Plot</h1>
+    {% from "_formhelpers.html" import render_field %}
+    <form method=post action="{{ url_for('plot_spectrum', filename=filename) }}">
+      <dl>
+          {{ render_field(form.mz_range_start) }}
+          {{ render_field(form.mz_range_end) }}
+      </dl>
+      <p><input type=submit value="Submit">
+    </form>
+
+
+    {% if p %}
+        <a href="{{ fig }}" class="btn btn-default">Show Plot</a>
+{#        <iframe src={{ fig }}></iframe>#}
+{#        <img src="{{ fig }}">#}
+    {% endif %}
+
 </body>
 </html>
