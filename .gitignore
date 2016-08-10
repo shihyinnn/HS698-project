@@ -7,3 +7,10 @@
 # Flask app
 Flask_app/static/*
 Flask_app/uploads/*
+
+# Vagrant
+.vagrant/
+
+#Vim
+*.swo
+*.swp
