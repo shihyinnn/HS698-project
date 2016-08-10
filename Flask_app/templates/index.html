@@ -1,22 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"
-          rel="stylesheet">
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <link rel="icon" href="/Content/AssetsBS3/img/favicon.ico">
+      <link href="/Content/AssetsBS3/examples/jumbotron.css" rel="stylesheet">
+      <script src="/Scripts/AssetsBS3/ie-emulation-modes-warning.js"></script>
+
+      <!-- Latest compiled and minified CSS -->
+      <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+      <!-- jQuery library -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+      <!-- Latest compiled JavaScript -->
+      <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+      <style type="text/css" id="parrottalks-notetaker-style">
+        html > body.evernote_clearly__before_visible #parrottalks-notetaker > iframe,
+        html > body.clearlyBeforeVisible #parrottalks-notetaker >
+        iframe:not(#evernoteGlobalTools):not(#evernoteOptionsPage):not(#evernoteClearlyArticle)
+        {        visibility: visible !important;      }
+        .evernote_clearly__before_visible #evernote_clearly__reformat,
+        .clearlyBeforeVisible #evernoteClearlyArticle
+        {        z-index: 2147483646 !important;      }
+      </style>
+
+{#    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"#}
+{#          rel="stylesheet">#}
   </head>
   <body>
-    <div class="container">
-      <div class="header">
-        <h3 class="text-muted">mzML File Analysis</h3>
+      <div class="jumbotron">
+        <div class="container">
+            <h1>PymzML</h1>
+            <br/>
+            <dl class="docutils">
+                <dt>pymzML is an extension to Python that offers</dt>
+                <br/>
+                <dd><ul class="first last simple">
+                    <li>
+                        <ol class="first loweralpha">
+                            easy access to mass spectrometry (MS) data that allows the rapid development of tools,
+                        </ol>
+                    </li>
+                    <li><ol class="first loweralpha" start="2">
+                        a very fast parser for mzML data, the standard in mass spectrometry data format and
+                    </ol>
+                    </li>
+                    <li>
+                        <ol class="first loweralpha" start="3">
+                            a set of functions to compare or handle spectra.
+                        </ol>
+                    </li>
+                </ul>
+                </dd>
+            </dl>
+        </div>
       </div>
-      <hr/>
-      <div>
 
-      <form action="upload" method="post" enctype="multipart/form-data">
-        <input type="file" name="file"><br /><br />
-        <input type="submit" value="Upload">
-      </form>
+      <div class="col-md-4">
+          <div class="container">
+          <h2>Now, upload a mzML file for analysis:</h2>
+              <form action="upload" method="post" enctype="multipart/form-data">
+                  <input type="file" name="file"><br /><br />
+                  <input type="submit" value="Upload">
+              </form>
+          </div>
       </div>
-    </div>
   </body>
 </html>
