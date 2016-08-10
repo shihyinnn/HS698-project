@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Finding A Peak</title>
+{#    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"#}
+{#          rel="stylesheet">#}
 </head>
 <body>
 <h1>Peak Finding</h1>
@@ -16,10 +18,22 @@
       <p><input type=submit value="Find Peaks">
     </form>
 
-    {% if lst %}
-        <p>{{ lst }}</p>
+{% if submission_successful %}
+    {% if result %}
+        <p>{{ result }}</p>
+    {% else %}
+        <p>Peak does not exist.</p>
     {% endif %}
+{% endif %}
 
+    <div>
+        <button onclick="goBack()">Back</button>
 
+        <script>
+        function goBack() {
+            window.history.back();
+        }
+        </script>
+    </div>
 </body>
 </html>
