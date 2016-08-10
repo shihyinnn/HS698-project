@@ -1,16 +1,12 @@
 import os
 import sys
-from flask import Flask, render_template, request, redirect, url_for, \
-    send_from_directory, jsonify
+from flask import Flask, render_template, request, url_for, jsonify
 from werkzeug import secure_filename
 import pymzml
-from wtforms import Form, IntegerField, validators, StringField, DecimalField, \
-    FloatField
+from wtforms import Form, IntegerField, DecimalField, FloatField
 
 # Initialize the Flask application
 app = Flask(__name__)
-
-
 
 # These is the extension that we are accepting to be uploaded
 app.config['ALLOWED_EXTENSIONS'] = set(['mzML'])
@@ -43,16 +39,12 @@ def upload():
     if file and allowed_file(file.filename):
         # Make the filename safe, remove unsupported chars
         filename = secure_filename(file.filename)
-        # Move the file from the temporal folder to
-        # the upload folder we setup
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        # Redirect the user to the uploaded_file route, which
-        # will basically show on the browser the uploaded file
 
-        # return filename
+        # Move the file from the temporal folder to the upload folder we setup
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
         return render_template("complete.html", filename=filename)
-        # return redirect(url_for('uploaded_file',
-        #                         filename=filename))
+
     else:
         return "File uploaded is not supported..."
 
@@ -62,10 +54,8 @@ class PeakFindingForm(Form):
     mz_value = DecimalField('MZ Value')
 
 
-# This route is expecting a parameter containing the name
-# of a file. Then it will locate that file on the upload
-# directory and show it on the browser, so if the user uploads
-# an image, that image is going to be show after the upload
+# Route that will allow users to find peaks using specific
+# ms level and m/z value
 @app.route('/peak_finding/<filename>', methods=["GET", "POST"])
 def peak_finding(filename):
     filepath = get_abs_path() + "/uploads/" + filename
@@ -88,11 +78,12 @@ def peak_finding(filename):
 
         submission_successful = True
         return render_template('peak_to_find.html', form=form,
-                               filename=filename, lst=lst, result=result,
+                               filename=filename, lst=lst,
                                submission_successful=submission_successful)
 
     # Create the form (the first time the page loads)
-    return render_template('peak_to_find.html', form=form, filename=filename, get_abs_path=get_abs_path())
+    return render_template('peak_to_find.html', form=form, filename=filename,
+                           get_abs_path=get_abs_path())
 
 
 class PlotSpectrumForm(Form):
@@ -100,6 +91,7 @@ class PlotSpectrumForm(Form):
     mz_range_end = FloatField('End')
 
 
+# Route for plotting the spectrum
 @app.route('/plot_spectrum/<filename>', methods=["GET", "POST"])
 def plot_spectrum(filename):
     filepath = get_abs_path() + "/uploads/" + filename
@@ -121,6 +113,7 @@ def plot_spectrum(filename):
             p.save(filename=os.path.join(get_abs_path(),
                                          "static/tmp/plotAspect.xhtml"),
                    mzRange=[start, end])
+
         return render_template('plotAspect.html',
                                fig=url_for('static',
                                            filename='tmp/plotAspect.xhtml'),
@@ -213,5 +206,4 @@ def original_XML_Tree(filename):
 
 
 if __name__ == '__main__':
-    # app.run(port=4555, debug=True)
     app.run(debug=True, host='0.0.0.0', port=5000)
