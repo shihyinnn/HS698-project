@@ -10,8 +10,7 @@ from wtforms import Form, IntegerField, validators, StringField, DecimalField, \
 # Initialize the Flask application
 app = Flask(__name__)
 
-# This is the path to the upload directory
-app.config['UPLOAD_FOLDER'] = 'uploads/'
+
 
 # These is the extension that we are accepting to be uploaded
 app.config['ALLOWED_EXTENSIONS'] = set(['mzML'])
@@ -25,6 +24,9 @@ def allowed_file(filename):
 
 def get_abs_path():
     return os.path.abspath(os.path.dirname(__file__))
+
+# This is the path to the upload directory
+app.config['UPLOAD_FOLDER'] = os.path.join(get_abs_path(), 'uploads')
 
 
 @app.route('/')
@@ -115,7 +117,9 @@ def plot_spectrum(filename):
             p.add(spec.peaks, color=(200, 00, 00), style='circles')
             p.add(spec.centroidedPeaks, color=(00, 00, 00), style='sticks')
             p.add(spec.reprofiledPeaks, color=(00, 255, 00), style='circles')
-            p.save(filename="static/tmp/plotAspect.xhtml", mzRange=[start, end])
+            p.save(filename=os.path.join(get_abs_path(),
+                                         "static/tmp/plotAspect.xhtml"),
+                   mzRange=[start, end])
         return render_template('plotAspect.html',
                                fig=url_for('static',
                                            filename='tmp/plotAspect.xhtml'),
