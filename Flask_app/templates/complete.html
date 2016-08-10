@@ -2,24 +2,58 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/Content/AssetsBS3/img/favicon.ico">
     <title>Upload File</title>
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"
-          rel="stylesheet">
+    <script src="/Scripts/AssetsBS3/ie-emulation-modes-warning.js"></script>
+    <link href="/Content/AssetsBS3/examples/theme.css" rel="stylesheet">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css" rel="stylesheet">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <style type="text/css" id="parrottalks-notetaker-style">
+        html > body.evernote_clearly__before_visible #parrottalks-notetaker > iframe,
+        html > body.clearlyBeforeVisible #parrottalks-notetaker >
+        iframe:not(#evernoteGlobalTools):not(#evernoteOptionsPage):not(#evernoteClearlyArticle)
+        {        visibility: visible !important;      }
+        .evernote_clearly__before_visible #evernote_clearly__reformat,
+        .clearlyBeforeVisible #evernoteClearlyArticle
+        {        z-index: 2147483646 !important;      }
+    </style>
 </head>
+
 <body>
     <p align="center">
-    <h2 align="center">Uploaded<br /></h2>
+    <h2 align="center">File Uploaded<br /></h2>
     </p>
 
     <br />
 
     <p align="center">
 
-        <a href="{{ url_for('peak_finding', filename=filename) }}" class="btn btn-default">Find a Peak</a>
-        <a href="{{ url_for('plot_spectrum', filename=filename) }}" class="btn btn-primary">Plot Spectrum</a>
-        <a href="{{ url_for('highest_peaks', filename=filename) }}" class="btn btn-success">Find Highest Peaks</a>
-        <a href="{{ url_for('extract_Ion_Chromatogram', filename=filename) }}" class="btn btn-info">Extract a Ion Chromatogram</a>
-        <a href="{{ url_for('original_XML_Tree', filename=filename) }}" class="btn btn-warning">Access Original XML Tree</a>
+        <a href="{{ url_for('peak_finding', filename=filename) }}" class="btn btn-lg btn-default" style="height:46px;width:261px">Find a Peak</a>
+        <br/>
+        <br/>
+        <a href="{{ url_for('plot_spectrum', filename=filename) }}" class="btn btn-lg btn-primary" style="height:46px;width:261px">Plot Spectrum</a>
+        <br/>
+        <br/>
+        <a href="{{ url_for('highest_peaks', filename=filename) }}" class="btn btn-lg btn-success" style="height:46px;width:261px">Find Highest Peaks</a>
+        <br/>
+        <br/>
+        <a href="{{ url_for('extract_Ion_Chromatogram', filename=filename) }}" class="btn btn-lg btn-info" style="height:46px;width:261px">Extract a Ion Chromatogram</a>
+        <br/>
+        <br/>
+        <a href="{{ url_for('original_XML_Tree', filename=filename) }}" class="btn btn-lg btn-warning" style="height:46px;width:261px">Access Original XML Tree</a>
 
     </p>
 
