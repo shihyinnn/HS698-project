@@ -17,14 +17,23 @@
       <p><input type=submit value="Find Peaks">
     </form>
 
-{% if submission_successful %}
-    {% if lst %}
-        <p>{{ lst }}</p>
-    {% else %}
-        <p>Peak does not exist.</p>
+    {% if submission_successful %}
+        {% if lst %}
+            <p>{{ lst }}</p>
+        {% else %}
+            <p>Peak does not exist.</p>
+        {% endif %}
     {% endif %}
-{% endif %}
 
+    <div>
+        <button onclick="goBack()">Back</button>
+
+        <script>
+        function goBack() {
+            window.history.back();
+        }
+        </script>
+    </div>
 
 </body>
 </html>
