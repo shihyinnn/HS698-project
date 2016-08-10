@@ -46,6 +46,7 @@ def aws():
     env.key_filename = '/Users/jenniferchen/Downloads/hs698v2.pem'
     env.virtualenv = {'dir': '/server', 'name': 'venv'}
 
+
 def bootstrap():
     """Set up and configure Vagrant to be able to serve the web app.
 
@@ -98,7 +99,8 @@ def sub_install_python_requirements():
     activate = 'source {0}/{1}/bin/activate'.format(
         env.virtualenv['dir'], env.virtualenv['name'])
     # Install Python requirements
-    install = 'pip install -r /vagrant/flask_ml/requirements.txt'
+    install = 'pip install -r /vagrant/Flask_app/requirements.txt'
+    # install = 'pip install -r /requirements.txt'
     # Join and execute the commands
     run(activate + '; ' + install)
 
@@ -109,5 +111,5 @@ def dev_server():
     activate = 'source {0}/{1}/bin/activate'.format(
         env.virtualenv['dir'], env.virtualenv['name'])
     # Run the file run_api.py to start the Flask app
-    dev_server = 'python /vagrant/flask_ml/run_api.py'
+    dev_server = 'python /vagrant/Flask_app/app.py'
     run(activate + '; ' + dev_server)
