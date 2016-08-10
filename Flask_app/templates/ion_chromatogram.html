@@ -40,10 +40,15 @@
 
 
 
-
-    {% if diction %}
-        <p>{{ diction }}</p>
-    {% endif %}
+    <dl>
+        {% if diction %}
+            {% for key, value in diction.iteritems() %}
+            <dt>{{ key }}</dt>
+                <dd>{{ value }}</dd>
+            <br/>
+            {% endfor %}
+        {% endif %}
+    </dl>
 
 </div>
 </body>
