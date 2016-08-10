@@ -5,13 +5,37 @@
     <meta charset="UTF-8">
     <meta HTTP-EQUIV="Cache-Control" CONTENT="no_cache">
     <title>Plot a Spectrum</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/Content/AssetsBS3/img/favicon.ico">
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/Content/AssetsBS3/examples/jumbotron.css" rel="stylesheet">
+    <!--[if lt IE 9]><script src=~/Scripts/AssetsBS3/ie8-responsive-file-warning.js></script><![endif]-->
+    <script src="/Scripts/AssetsBS3/ie-emulation-modes-warning.js"></script>
+    <!--[if lt IE 9]><script src=https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js></script><script src=https://oss.maxcdn.com/respond/1.4.2/respond.min.js></script><![endif]-->
+    <style type="text/css" id="parrottalks-notetaker-style">
+        html > body.evernote_clearly__before_visible #parrottalks-notetaker >
+        iframe,      html > body.clearlyBeforeVisible #parrottalks-notetaker >
+        iframe:not(#evernoteGlobalTools):not(#evernoteOptionsPage):not(#evernoteClearlyArticle)
+        {        visibility: visible !important;      }
+        .evernote_clearly__before_visible #evernote_clearly__reformat,
+        .clearlyBeforeVisible #evernoteClearlyArticle
+        {        z-index: 2147483646 !important;      }
+    </style>
+
 </head>
 <body>
-    <h1>Spectrum Plot</h1>
+<div style="text-align:center">
+    <h1>Spectrum Plot</h1><br/>
     {% from "_formhelpers.html" import render_field %}
     <form method=post action="{{ url_for('plot_spectrum', filename=filename) }}">
       <dl>
           {{ render_field(form.mz_range_start) }}
+          <br/>
           {{ render_field(form.mz_range_end) }}
       </dl>
       <p><input type=submit value="Submit">
@@ -21,7 +45,7 @@
     {% if p %}
         <a href="{{ fig }}" class="btn btn-default">Show Plot</a>
     {% endif %}
-
+    <br/>
    <div>
         <button onclick="goBack()">Back</button>
 
@@ -31,6 +55,6 @@
         }
         </script>
     </div>
-
+</div>
 </body>
 </html>
