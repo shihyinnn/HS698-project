@@ -27,13 +27,15 @@
 </head>
 <body>
 <div style="text-align:center">
-    <h1>Extract Ion Chromatogram</h1>
+    <h1>Extract Ion Chromatogram</h1><br/>
 
     {% from "_formhelpers.html" import render_field %}
     <form method=post action="{{ url_for('extract_Ion_Chromatogram', filename=filename) }}">
       <dl>
           {{ render_field(form.spectrum_ms_level) }}
+          <br/>
           {{ render_field(form.mz2find ) }}
+          <br/>
       </dl>
       <p><input type=submit value="Extract Ion Chromatogram">
     </form>
@@ -49,6 +51,16 @@
             {% endfor %}
         {% endif %}
     </dl>
+    <br/>
+    <div>
+        <button onclick="goBack()">Back</button>
+
+        <script>
+        function goBack() {
+            window.history.back();
+        }
+        </script>
+    </div>
 
 </div>
 </body>
