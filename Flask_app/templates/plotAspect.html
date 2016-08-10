@@ -20,9 +20,17 @@
 
     {% if p %}
         <a href="{{ fig }}" class="btn btn-default">Show Plot</a>
-{#        <iframe src={{ fig }}></iframe>#}
-{#        <img src="{{ fig }}">#}
     {% endif %}
+
+   <div>
+        <button onclick="goBack()">Back</button>
+
+        <script>
+        function goBack() {
+            window.history.back();
+        }
+        </script>
+    </div>
 
 </body>
 </html>
