@@ -43,11 +43,14 @@
 
     {% if submission_successful %}
         {% if lst %}
-            <p>{{ lst }}</p>
+            {% for peak in lst %}
+            {{ peak }}<br/>
+            {% endfor %}
         {% else %}
             <p>Peak does not exist.</p>
         {% endif %}
     {% endif %}
+<br/>
     <div>
         <button onclick="goBack()">Back</button>
 
