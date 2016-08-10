@@ -85,9 +85,7 @@ def peak_finding(filename):
                 peak_to_find = spectrum.hasPeak(mz_value)
                 if peak_to_find:
                     lst.append(peak_to_find)
-        result = []
-        for i in xrange(len(lst)):
-            result.append(lst[i][0][1])
+
         submission_successful = True
         return render_template('peak_to_find.html', form=form,
                                filename=filename, lst=lst, result=result,
@@ -98,8 +96,6 @@ def peak_finding(filename):
 
 
 class PlotSpectrumForm(Form):
-    # mz_range_start = DecimalField('Start')
-    # mz_range_end = DecimalField('End')
     mz_range_start = FloatField('Start')
     mz_range_end = FloatField('End')
 
