@@ -16,31 +16,22 @@
       </dl>
       <p><input type=submit value="Extract Ion Chromatogram">
     </form>
-
-
-{#    {% if json_dict %}#}
-{#        <p>{{ json_dict }}</p>#}
-{#    {% endif %}#}
+    
 
     {% if diction %}
         <p>{{ diction }}</p>
     {% endif %}
-{#    fail to display jsonify dictionary in html#}
 
-{#    {% if diction %}#}
-{#        <p >{{ diction|safe }}</p>#}
-{#        <p>{{ diction }}</p>#}
-{#        <p id="ptag"></p>#}
-{#    {% endif %}#}
+    <div>
+        <button onclick="goBack()">Back</button>
+
+        <script>
+        function goBack() {
+            window.history.back();
+        }
+        </script>
+    </div>
 
 </body>
-{#<script>#}
-{#var data = JSON.parse({{ diction|safe }});#}
-{#console.log(data.name);#}
-{#    var jsonVar ={{ diction|tojson }};#}
-{#    var jsonStr = JSON.stringify(JSON.parse(jsonVar), null, 4);#}
-{#    document.body.innerHTML = jsonStr;#}
-{#    var json_dict = {{ diction|tojson }};#}
-{#    document.getElementById("ptag").innerHTML = jsonStr;#}
-{#</script>#}
+
 </html>
