@@ -35,7 +35,7 @@ def index():
 
 
 # Route that will process the file upload
-@app.route('/upload', methods=['POST'])
+@app.route('/upload', methods=['POST', 'GET'])
 def upload():
     # Get the name of the uploaded file
     file = request.files['file']
@@ -85,11 +85,16 @@ def peak_finding(filename):
                 peak_to_find = spectrum.hasPeak(mz_value)
                 if peak_to_find:
                     lst.append(peak_to_find)
+        result = []
+        for i in xrange(len(lst)):
+            result.append(lst[i][0][1])
+        submission_successful = True
         return render_template('peak_to_find.html', form=form,
-                               filename=filename, lst=lst)
+                               filename=filename, lst=lst, result=result,
+                               submission_successful=submission_successful)
 
     # Create the form (the first time the page loads)
-    return render_template('peak_to_find.html', form=form, filename=filename)
+    return render_template('peak_to_find.html', form=form, filename=filename, get_abs_path=get_abs_path())
 
 
 class PlotSpectrumForm(Form):
@@ -155,9 +160,10 @@ def highest_peaks(filename):
                 if spectrum["id"] == id_value:
                     for mz, i in spectrum.highestPeaks(num_of_peaks):
                         lst.append((mz, i))
-
+        submission_successful = True
         return render_template('highest_peaks.html', form=form,
-                               filename=filename, lst=lst)
+                               filename=filename, lst=lst,
+                               submission_successful=submission_successful)
     return render_template('highest_peaks.html', form=form, filename=filename)
 
 
