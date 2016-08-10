@@ -17,11 +17,14 @@
       <p><input type=submit value="Find Peaks">
     </form>
 
+{% if submission_successful %}
     {% if lst %}
         <p>{{ lst }}</p>
     {% else %}
         <p>Peak does not exist.</p>
     {% endif %}
+{% endif %}
+
 
 </body>
 </html>
