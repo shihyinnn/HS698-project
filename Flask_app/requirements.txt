@@ -1,6 +1,5 @@
 Flask==0.10.1
 Flask-WTF==0.12
-functools32==3.2.3.post2
 itsdangerous==0.24
 Jinja2==2.8
 jsonschema==2.5.1
@@ -15,5 +14,4 @@ requests==2.10.0
 six==1.10.0
 tornado==4.3
 Werkzeug==0.11.10
-widgetsnbextension==1.2.3
 WTForms==2.1
