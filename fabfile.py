@@ -1,10 +1,12 @@
-from fabric.api import run, sudo, env
+from fabric.api import run, sudo, env, put
 import subprocess
 
 
 ### LINUX PACKAGES TO INSTALL ###
 
 INSTALL_PACKAGES = [
+   'apache2',
+   'libapache2-mod-wsgi',
    'openssl',
    'libxml2-dev',
    'libxslt1-dev',
@@ -20,8 +22,8 @@ INSTALL_PACKAGES = [
    'python-scipy'
 ]
 
-### ENVIRONMENTS ###
 
+### ENVIRONMENTS ###
 def vagrant():
     """Defines the Vagrant virtual machine's environment variables.
     
@@ -56,6 +58,18 @@ def bootstrap():
     sub_install_virtualenv()
     sub_create_virtualenv()
     sub_install_python_requirements()
+
+
+def bootstrap_aws():
+    """Set up and configure AWS(EC2) to be able to serve the web app.
+
+    Runs commands on the command line to configure the Ubuntu server.
+    Run the Flask development server on the EC2 server.
+    """
+    sub_install_packages()
+    sub_install_virtualenv()
+    sub_create_virtualenv()
+    sub_install_python_requirements_aws()
 
 
 def sub_install_packages():
@@ -98,9 +112,11 @@ def sub_install_python_requirements():
     # Activate the virtualenv
     activate = 'source {0}/{1}/bin/activate'.format(
         env.virtualenv['dir'], env.virtualenv['name'])
+    run(activate)
+
     # Install Python requirements
     install = 'pip install -r /vagrant/Flask_app/requirements.txt'
-    # install = 'pip install -r /requirements.txt'
+
     # Join and execute the commands
     run(activate + '; ' + install)
 
@@ -110,6 +126,44 @@ def dev_server():
     # Activate the virtualenv
     activate = 'source {0}/{1}/bin/activate'.format(
         env.virtualenv['dir'], env.virtualenv['name'])
-    # Run the file run_api.py to start the Flask app
-    dev_server = 'python /vagrant/Flask_app/app.py'
+    # Run the file app.py to start the Flask app
+    dev_server = 'python vagrant/Flask_app/app.py'
     run(activate + '; ' + dev_server)
+
+
+def sub_install_python_requirements_aws():
+    """Install the Flask apps' Python requirements into the aws.
+
+    We need to activate the virtualenv before installing into it. We do that
+    with the command 'source /server/bin/activate'. We copy the Flask apps'
+    directory using Fabric's copy mechanism to /home/ubuntu. The application
+    requirements live in the requirements.txt file. This file lives at
+    /HS698-project/Flask_app/requirements.txt.
+
+    Run the Flask development server on the AWS(EC2) server. The Flask app can
+    be reached at http://EC2_IP:5000/
+    (EC2_IP = 54.187.201.203)
+    """
+    # Activate the virtualenv
+    activate = 'source {0}/{1}/bin/activate'.format(
+        env.virtualenv['dir'], env.virtualenv['name'])
+    run(activate)
+
+    # make sure the directory is there
+    run('mkdir -p /home/ubuntu')
+
+    # put the local directory '/Users/jenniferchen/github/HS698-project'
+    # - it contains files or subdirectories
+    # to the ubuntu server
+    put('/Users/jenniferchen/github/HS698-project',
+        '/home/ubuntu')
+
+    # Install Python requirements
+    install = 'pip install -r ' \
+              '/home/ubuntu/HS698-project/Flask_app/requirements.txt'
+
+    # Join and execute the commands
+    sudo(install)
+    # Run the file app.py to start the Flask app
+    dev_server = 'python HS698-project/Flask_app/app.py'
+    run(dev_server)
